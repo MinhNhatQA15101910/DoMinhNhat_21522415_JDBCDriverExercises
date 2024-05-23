@@ -1,4 +1,5 @@
-﻿CREATE DATABASE QLSV;
+﻿-- Bài 1 
+CREATE DATABASE QLSV;
 GO
 
 USE QLSV;
@@ -69,3 +70,10 @@ INSERT INTO SinhVien(MaSV, HoTen, Lop, DiemTB) VALUES
 ('21521065', N'Nguyễn Tiến Luận', 'TMDT2021', 5.2),
 ('21521066', N'Nguyễn Xuân Luân', 'TTNT2021', 6.1);
 GO
+
+-- Bài 2
+CREATE TABLE Lop (
+    MaLop INT PRIMARY KEY,
+    TenLop NVARCHAR(50),
+    CVHT NVARCHAR(50)
+);
