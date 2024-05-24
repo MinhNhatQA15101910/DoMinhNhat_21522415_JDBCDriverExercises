@@ -80,7 +80,7 @@ public class Main extends JFrame {
         panel.add(new JLabel("MaSV:"));
         panel.add(maSVField);
         panel.add(new JLabel("HoTen:"));
-        panel.add(hoTenField);
+        panel.add(hoTenField, 1);
         panel.add(new JLabel("Lop:"));
         panel.add(lopField);
         panel.add(new JLabel("DiemTB:"));
