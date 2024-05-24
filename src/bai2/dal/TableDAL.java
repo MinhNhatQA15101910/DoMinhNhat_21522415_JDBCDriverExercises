@@ -1,6 +1,5 @@
 package bai2.dal;
 
-import bai1.dal.Utils;
 import bai2.dto.TableDTO;
 
 import java.sql.*;
