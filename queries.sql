@@ -8,7 +8,7 @@ GO
 CREATE TABLE SinhVien(
 	MaSV VARCHAR(8) NOT NULL,
 	HoTen NVARCHAR(200) NOT NULL,
-	Lop VARCHAR(20) NOT NULL,
+	Lop VARCHAR(8) NOT NULL,
 	DiemTB FLOAT NOT NULL,
 
 	CONSTRAINT PK_SinhVien PRIMARY KEY (MaSV) 
@@ -73,7 +73,28 @@ GO
 
 -- Bài 2
 CREATE TABLE Lop (
-    MaLop INT PRIMARY KEY,
-    TenLop NVARCHAR(50),
-    CVHT NVARCHAR(50)
+    MaLop VARCHAR(8),
+    TenLop NVARCHAR(200),
+    CVHT NVARCHAR(200),
+
+	CONSTRAINT PK_Lop PRIMARY KEY (MaLop)
 );
+GO
+
+INSERT INTO Lop VALUES 
+('KHMT2021', N'Khoa học máy tính 2021', N'Hoàng Ngọc Lương'),
+('TTNT2021', N'Trí tuệ nhân tạo 2021', N'Phạm Nguyễn Trường An'),
+('MMT2021', N'Mạng máy tính 2021', N'Thái Huy Tân'),
+('KTPM2021', N'Kỹ thuật phần mềm 2021', N'Nguyễn Tấn Trần Minh Khang'),
+('HTTT2021', N'Hệ thống thông tin 2021', N'Thái Bảo Trân'),
+('TMDT2021', N'Thương mại điện tử 2021', N'Nguyễn Thanh Bình'),
+('KTMT2021', N'Kỹ thuật máy tính 2021', N'Trần Ngọc Đức'),
+('CNTT2021', N'Công nghệ thông tin 2021', N'Trần Hồng Nghi'),
+('ATTT2021', N'An toàn thông tin 2021', N'Nguyễn Hồ Duy Trí'),
+('KHDL2021', N'Khoa học dữ liệu 2021', N'Nguyễn Bích Vân');
+GO
+
+
+ALTER TABLE SinhVien
+ADD CONSTRAINT FK_SinhVien_Lop
+FOREIGN KEY (Lop) REFERENCES Lop (MaLop);
