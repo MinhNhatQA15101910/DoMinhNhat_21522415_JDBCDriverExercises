@@ -32,12 +32,29 @@ public class ClassManagementTab extends JPanel {
         // Control panel
         createControlPanel();
         add(controlPanel, BorderLayout.SOUTH);
+
+        // Handle listeners
+        classTable.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                int selectedRow = classTable.getSelectedRow();
+                if (selectedRow != -1) {
+                    String maLop = (String) classTable.getValueAt(selectedRow, 0);
+                    String tenLop = (String) classTable.getValueAt(selectedRow, 1);
+                    String cvht = (String) classTable.getValueAt(selectedRow, 2);
+
+                    maLopTextField.setText(maLop);
+                    tenLopTextField.setText(tenLop);
+                    cvhtTextField.setText(cvht);
+                }
+            }
+        });
     }
 
     private void loadClasses() {
         List<LopDTO> classList = _classBLL.getAllClasses();
         LopTableModel classTableModel = new LopTableModel(classList);
         classTable = new JTable(classTableModel);
+        classTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         classScrollPane = new JScrollPane(classTable);
     }
 

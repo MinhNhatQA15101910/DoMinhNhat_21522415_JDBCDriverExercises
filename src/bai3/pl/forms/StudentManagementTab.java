@@ -33,12 +33,31 @@ public class StudentManagementTab extends JPanel {
         // Control panel
         createControlPanel();
         add(controlPanel, BorderLayout.SOUTH);
+
+        // Handle listeners
+        studentTable.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                int selectedRow = studentTable.getSelectedRow();
+                if (selectedRow != -1) {
+                    String maSV = (String) studentTable.getValueAt(selectedRow, 0);
+                    String hoTen = (String) studentTable.getValueAt(selectedRow, 1);
+                    String lop = (String) studentTable.getValueAt(selectedRow, 2);
+                    float diemTB = (float) studentTable.getValueAt(selectedRow, 3);
+
+                    maSVTextField.setText(maSV);
+                    hoTenTextField.setText(hoTen);
+                    lopTextField.setText(lop);
+                    diemTBTextField.setText(Float.toString(diemTB));
+                }
+            }
+        });
     }
 
     private void loadStudents() {
         List<SinhVienDTO> studentList = _studentBLL.getAllStudents();
         SinhVienTableModel classTableModel = new SinhVienTableModel(studentList);
         studentTable = new JTable(classTableModel);
+        studentTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         studentScrollPane = new JScrollPane(studentTable);
     }
 
