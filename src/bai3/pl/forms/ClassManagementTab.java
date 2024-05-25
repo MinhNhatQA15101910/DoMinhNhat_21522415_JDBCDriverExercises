@@ -2,7 +2,8 @@ package bai3.pl.forms;
 
 import bai3.bll.ClassBLL;
 import bai3.bll.IClassBLL;
-import bai3.dto.LopDTO;
+import bai3.dto.models.LopDTO;
+import bai3.dto.responses.MessageDTO;
 import bai3.pl.interfaces.IAddUpdateClassRequester;
 import bai3.pl.tablemodels.LopTableModel;
 
@@ -50,10 +51,29 @@ public class ClassManagementTab extends JPanel implements IAddUpdateClassRequest
             }
         });
 
+        deleteBtn.addActionListener(e -> {
+            int reply = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn muốn xóa lớp đã chọn?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+            if (reply == JOptionPane.YES_OPTION) {
+                int selectedRow = classTable.getSelectedRow();
+                if (selectedRow != -1) {
+                    String maLop = (String) classTable.getValueAt(selectedRow, 0);
+
+                    MessageDTO message = _classBLL.deleteClass(maLop);
+                    if (message.statusCode() == 200) {
+                        JOptionPane.showMessageDialog(null, message.message(), "Thành công", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(null, message.message(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+        });
+
         addBtn.addActionListener(e -> {
             AddUpdateClassForm form = new AddUpdateClassForm(this);
             form.setVisible(true);
         });
+
+
     }
 
     private void loadClasses() {

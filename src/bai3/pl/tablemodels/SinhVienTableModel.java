@@ -1,6 +1,6 @@
 package bai3.pl.tablemodels;
 
-import bai3.dto.SinhVienDTO;
+import bai3.dto.models.SinhVienDTO;
 
 import javax.swing.table.DefaultTableModel;
 import java.util.List;

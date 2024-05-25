@@ -1,6 +1,6 @@
 package bai3.pl.forms;
 
-import bai3.dto.SinhVienDTO;
+import bai3.dto.models.SinhVienDTO;
 import bai3.pl.interfaces.IAddUpdateStudentRequester;
 
 import javax.swing.*;

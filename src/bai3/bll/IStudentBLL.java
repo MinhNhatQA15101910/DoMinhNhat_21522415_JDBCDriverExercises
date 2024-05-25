@@ -1,6 +1,6 @@
 package bai3.bll;
 
-import bai3.dto.SinhVienDTO;
+import bai3.dto.models.SinhVienDTO;
 
 import java.util.List;
 

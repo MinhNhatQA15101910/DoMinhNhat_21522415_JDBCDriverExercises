@@ -1,12 +1,32 @@
 package bai3.dal;
 
-import bai3.dto.LopDTO;
+import bai3.dto.models.LopDTO;
+import bai3.dto.responses.MessageDTO;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ClassDAL implements IClassDAL {
+    @Override
+    public MessageDTO deleteClass(String maLop) {
+        try (Connection conn = DriverManager.getConnection(Utils.CONNECTION_URL)) {
+            try (PreparedStatement pstmt = conn.prepareStatement("DELETE FROM Lop WHERE MaLop = ?")) {
+                pstmt.setString(1, maLop);
+
+                int rowsAffected = pstmt.executeUpdate();
+
+                if (rowsAffected > 0) {
+                    return new MessageDTO(200, "Xóa lớp thành công.");
+                }
+
+                return new MessageDTO(500, "Đã có lỗi xảy ra.");
+            }
+        } catch (SQLException e) {
+            return new MessageDTO(500, e.getMessage());
+        }
+    }
+
     @Override
     public List<LopDTO> getAllClasses() {
         List<LopDTO> classList = new ArrayList<>();

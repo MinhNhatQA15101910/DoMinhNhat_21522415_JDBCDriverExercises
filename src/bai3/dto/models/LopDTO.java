@@ -1,4 +1,4 @@
-package bai3.dto;
+package bai3.dto.models;
 
 public class LopDTO {
     private String maLop;
