@@ -3,13 +3,14 @@ package bai3.pl.forms;
 import bai3.bll.ClassBLL;
 import bai3.bll.IClassBLL;
 import bai3.dto.LopDTO;
+import bai3.pl.interfaces.IAddUpdateClassRequester;
 import bai3.pl.tablemodels.LopTableModel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-public class ClassManagementTab extends JPanel {
+public class ClassManagementTab extends JPanel implements IAddUpdateClassRequester {
     private final IClassBLL _classBLL = new ClassBLL();
 
     private JTable classTable;
@@ -47,6 +48,11 @@ public class ClassManagementTab extends JPanel {
                     cvhtTextField.setText(cvht);
                 }
             }
+        });
+
+        addBtn.addActionListener(e -> {
+            AddUpdateClassForm form = new AddUpdateClassForm(this);
+            form.setVisible(true);
         });
     }
 
@@ -88,5 +94,10 @@ public class ClassManagementTab extends JPanel {
         deleteBtn = new JButton("Xóa");
         buttonsPanel.add(deleteBtn);
         controlPanel.add(buttonsPanel);
+    }
+
+    @Override
+    public void onAddUpdateClassFormClosing() {
+        loadClasses();
     }
 }

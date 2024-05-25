@@ -94,7 +94,6 @@ INSERT INTO Lop VALUES
 ('KHDL2021', N'Khoa học dữ liệu 2021', N'Nguyễn Bích Vân');
 GO
 
-
 ALTER TABLE SinhVien
 ADD CONSTRAINT FK_SinhVien_Lop
 FOREIGN KEY (Lop) REFERENCES Lop (MaLop);

@@ -3,13 +3,14 @@ package bai3.pl.forms;
 import bai3.bll.IStudentBLL;
 import bai3.bll.StudentBLL;
 import bai3.dto.SinhVienDTO;
+import bai3.pl.interfaces.IAddUpdateStudentRequester;
 import bai3.pl.tablemodels.SinhVienTableModel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-public class StudentManagementTab extends JPanel {
+public class StudentManagementTab extends JPanel implements IAddUpdateStudentRequester {
     private final IStudentBLL _studentBLL = new StudentBLL();
 
     private JTable studentTable;
@@ -50,6 +51,11 @@ public class StudentManagementTab extends JPanel {
                     diemTBTextField.setText(Float.toString(diemTB));
                 }
             }
+        });
+
+        addBtn.addActionListener(e -> {
+            AddUpdateStudentForm form = new AddUpdateStudentForm(this);
+            form.setVisible(true);
         });
     }
 
@@ -93,5 +99,10 @@ public class StudentManagementTab extends JPanel {
         deleteBtn = new JButton("Xóa");
         buttonsPanel.add(deleteBtn);
         controlPanel.add(buttonsPanel);
+    }
+
+    @Override
+    public void onAddUpdateStudentFormClosing() {
+        loadStudents();
     }
 }
