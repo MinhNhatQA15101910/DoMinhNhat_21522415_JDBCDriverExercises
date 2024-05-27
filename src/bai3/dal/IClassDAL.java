@@ -11,4 +11,5 @@ public interface IClassDAL {
     LopDTO getClassById(String maLop);
     LopDTO getClassByName(String tenLop);
     List<LopDTO> getAllClasses();
+    MessageDTO updateClass(LopDTO classObj);
 }

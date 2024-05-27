@@ -99,13 +99,28 @@ public class AddUpdateClassForm extends JFrame {
     }
 
     private void updateClass() {
+        LopDTO updatedClass = new LopDTO(
+                maLopTextField.getText().trim(),
+                tenLopTextField.getText().trim(),
+                cvhtTextField.getText().trim()
+        );
+
+        MessageDTO message = _classBLL.updateClass(updatedClass);
+        if (message.statusCode() == 200) {
+            if (_addUpdateClassRequester != null) {
+                _addUpdateClassRequester.onAddUpdateClassFormClosing();
+            }
+            JOptionPane.showMessageDialog(null, message.message(), "Thành công", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, message.message(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void addClass() {
         LopDTO newClass = new LopDTO(
-                maLopTextField.getText(),
-                tenLopTextField.getText(),
-                cvhtTextField.getText()
+                maLopTextField.getText().trim(),
+                tenLopTextField.getText().trim(),
+                cvhtTextField.getText().trim()
         );
 
         MessageDTO message = _classBLL.addClass(newClass);

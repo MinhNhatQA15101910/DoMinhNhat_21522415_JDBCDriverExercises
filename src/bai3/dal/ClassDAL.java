@@ -118,4 +118,25 @@ public class ClassDAL implements IClassDAL {
 
         return classList;
     }
+
+    @Override
+    public MessageDTO updateClass(LopDTO classObj) {
+        try (Connection conn = DriverManager.getConnection(Utils.CONNECTION_URL)) {
+            try (PreparedStatement pstmt = conn.prepareStatement("UPDATE Lop SET TenLop = ?, CVHT = ? WHERE MaLop = ?")) {
+                pstmt.setString(1, classObj.tenLop());
+                pstmt.setString(2, classObj.cvht());
+                pstmt.setString(3, classObj.maLop());
+
+                int rowsAffected = pstmt.executeUpdate();
+
+                if (rowsAffected > 0) {
+                    return new MessageDTO(200, "Cập nhật lớp thành công.");
+                }
+
+                return new MessageDTO(500, "Đã có lỗi xảy ra.");
+            }
+        } catch (SQLException e) {
+            return new MessageDTO(500, e.getMessage());
+        }
+    }
 }

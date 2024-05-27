@@ -70,4 +70,31 @@ public class ClassBLL implements IClassBLL {
 
         return _classDAL.deleteClass(maLop);
     }
+
+    @Override
+    public MessageDTO updateClass(LopDTO classObj) {
+        if (classObj.tenLop().isEmpty()) {
+            return new MessageDTO(
+                    400,
+                    "Tên lớp không được để trống."
+            );
+        }
+
+        if (classObj.cvht().isEmpty()) {
+            return new MessageDTO(
+                    400,
+                    "Cố vấn học tập không được để trống."
+            );
+        }
+
+        LopDTO existingClass = _classDAL.getClassByName(classObj.tenLop());
+        if (!existingClass.maLop().isEmpty() && !existingClass.maLop().equals(classObj.maLop())) {
+            return new MessageDTO(
+                    400,
+                    "Đã tồn tại lớp với tên lớp được nhập."
+            );
+        }
+
+        return _classDAL.updateClass(classObj);
+    }
 }
