@@ -17,6 +17,7 @@ public class ClassManagementTab extends JPanel implements IAddUpdateClassRequest
     private JTable classTable;
     private LopTableModel classTableModel;
 
+    // Control
     private JScrollPane classScrollPane;
     private JPanel controlPanel;
     private JTextField maLopTextField;

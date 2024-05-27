@@ -19,6 +19,10 @@ public class SinhVienTableModel extends AbstractTableModel {
         fireTableDataChanged();
     }
 
+    public String[] getColumnNames() {
+        return columnNames;
+    }
+
     @Override
     public int getRowCount() {
         return students.size();

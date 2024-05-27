@@ -10,6 +10,7 @@ import bai4.pl.tablemodels.SinhVienTableModel;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
+import java.util.Objects;
 
 public class StudentManagementTab extends JPanel implements IAddUpdateStudentRequester {
     private final IStudentBLL _studentBLL = new StudentBLL();
@@ -17,6 +18,7 @@ public class StudentManagementTab extends JPanel implements IAddUpdateStudentReq
     private JTable studentTable;
     private SinhVienTableModel studentTableModel;
 
+    // Control
     private JScrollPane studentScrollPane;
     private JPanel controlPanel;
     private JTextField maSVTextField;
@@ -26,6 +28,16 @@ public class StudentManagementTab extends JPanel implements IAddUpdateStudentReq
     private JButton addBtn;
     private JButton updateBtn;
     private JButton deleteBtn;
+
+    // Filter
+    private JPanel filterPanel;
+    private JButton filterBtn;
+    private JComboBox<String> filterAttrComboBox;
+    private JTextField maSVFilterTextField;
+    private JTextField hoTenFilterTextField;
+    private JTextField lopFilterTextField;
+    private JTextField diemTBMinFilterTextField;
+    private JTextField diemTBMaxFilterTextField;
 
     public StudentManagementTab() {
         setLayout(new BorderLayout());
@@ -37,6 +49,10 @@ public class StudentManagementTab extends JPanel implements IAddUpdateStudentReq
         // Control panel
         createControlPanel();
         add(controlPanel, BorderLayout.SOUTH);
+
+        // Filter panel
+        createFilterPanel();
+        add(filterPanel, BorderLayout.NORTH);
 
         // Handle listeners
         studentTable.getSelectionModel().addListSelectionListener(e -> {
@@ -93,6 +109,26 @@ public class StudentManagementTab extends JPanel implements IAddUpdateStudentReq
                 form.setVisible(true);
             }
         });
+
+        filterAttrComboBox.addActionListener(e -> {
+            JComboBox<String> source = (JComboBox<String>) e.getSource();
+            String selectedItem = (String) source.getSelectedItem();
+
+            filterPanel.remove(1);
+
+            if (Objects.equals(selectedItem, "MaSV")) {
+                filterPanel.add(createMaSVFilterPanel(), 1);
+            } else if (Objects.equals(selectedItem, "HoTen")) {
+                filterPanel.add(createHotenFilterPanel(), 1);
+            } else if (Objects.equals(selectedItem, "Lop")) {
+                filterPanel.add(createLopFilterPanel(), 1);
+            } else if (Objects.equals(selectedItem, "DiemTB")) {
+                filterPanel.add(createDiemTBFilterPanel(), 1);
+            }
+
+            filterPanel.revalidate();
+            filterPanel.repaint();
+        });
     }
 
     private void loadStudents() {
@@ -145,6 +181,75 @@ public class StudentManagementTab extends JPanel implements IAddUpdateStudentReq
         deleteBtn = new JButton("Xóa");
         buttonsPanel.add(deleteBtn);
         controlPanel.add(buttonsPanel);
+    }
+
+    private void createFilterPanel() {
+        filterPanel = new JPanel(new GridLayout(1, 3, 10, 10));
+
+        filterAttrComboBox = new JComboBox<>(studentTableModel.getColumnNames());
+        filterPanel.add(filterAttrComboBox);
+
+        filterPanel.add(createMaSVFilterPanel());
+
+        filterBtn = new JButton("Lọc");
+        filterPanel.add(filterBtn);
+    }
+
+    private JPanel createMaSVFilterPanel() {
+        JPanel panel = new JPanel(new GridLayout(1, 2));
+
+        panel.add(new JLabel("MSSV:"));
+
+        maSVFilterTextField = new JTextField();
+        panel.add(maSVFilterTextField);
+
+        panel.requestFocus();
+
+        return panel;
+    }
+
+    private JPanel createHotenFilterPanel() {
+        JPanel panel = new JPanel(new GridLayout(1, 2));
+
+        panel.add(new JLabel("Họ tên:"));
+
+        hoTenFilterTextField = new JTextField();
+        panel.add(hoTenFilterTextField);
+
+        panel.requestFocus();
+
+        return panel;
+    }
+
+    private JPanel createLopFilterPanel() {
+        JPanel panel = new JPanel(new GridLayout(1, 2));
+
+        panel.add(new JLabel("Lớp:"));
+
+        lopFilterTextField = new JTextField();
+        panel.add(lopFilterTextField);
+
+        panel.requestFocus();
+
+        return panel;
+    }
+
+    private JPanel createDiemTBFilterPanel() {
+        JPanel panel = new JPanel(new GridLayout(1, 2));
+
+        panel.add(new JLabel("Min:"));
+
+        diemTBMinFilterTextField = new JTextField();
+        panel.add(diemTBMinFilterTextField);
+
+        panel.add(new JLabel("Max:"));
+
+        diemTBMaxFilterTextField = new JTextField();
+        panel.add(diemTBMaxFilterTextField);
+
+        panel.requestFocus();
+
+        return panel;
     }
 
     @Override
