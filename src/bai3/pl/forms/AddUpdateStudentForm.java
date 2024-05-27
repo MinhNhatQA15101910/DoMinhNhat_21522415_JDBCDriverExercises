@@ -2,6 +2,8 @@ package bai3.pl.forms;
 
 import bai3.bll.ClassBLL;
 import bai3.bll.IClassBLL;
+import bai3.bll.IStudentBLL;
+import bai3.bll.StudentBLL;
 import bai3.dto.models.LopDTO;
 import bai3.dto.models.SinhVienDTO;
 import bai3.dto.responses.MessageDTO;
@@ -15,15 +17,16 @@ import java.util.Objects;
 
 public class AddUpdateStudentForm extends JFrame {
     private final IClassBLL _classBLL = new ClassBLL();
+    private final IStudentBLL _studentBLL = new StudentBLL();
 
     private final IAddUpdateStudentRequester _addUpdateStudentRequester;
     private SinhVienDTO _student = null;
 
-    private JTextField maSVTextField;
-    private JTextField hoTenTextField;
-    private JComboBox<LopDTO> lopComboBox;
-    private JTextField diemTBField;
-    private JButton featureBtn;
+    private final JTextField maSVTextField;
+    private final JTextField hoTenTextField;
+    private final JComboBox<LopDTO> lopComboBox;
+    private final JTextField diemTBField;
+    private final JButton featureBtn;
 
     public AddUpdateStudentForm(IAddUpdateStudentRequester requester) {
         _addUpdateStudentRequester = requester;
@@ -133,7 +136,23 @@ public class AddUpdateStudentForm extends JFrame {
     }
 
     private void addStudent() {
+        SinhVienDTO student = new SinhVienDTO(
+                maSVTextField.getText().trim(),
+                hoTenTextField.getText().trim(),
+                ((LopDTO) Objects.requireNonNull(lopComboBox.getSelectedItem())).maLop(),
+                0
+        );
+        String avgScore = diemTBField.getText();
 
+        MessageDTO message = _studentBLL.addStudent(student, avgScore);
+        if (message.statusCode() == 200) {
+            if (_addUpdateStudentRequester != null) {
+                _addUpdateStudentRequester.onAddUpdateStudentFormClosing();
+            }
+            JOptionPane.showMessageDialog(null, message.message(), "Thành công", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, message.message(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void updateStudent() {
