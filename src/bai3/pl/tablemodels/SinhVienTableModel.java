@@ -2,34 +2,42 @@ package bai3.pl.tablemodels;
 
 import bai3.dto.models.SinhVienDTO;
 
-import javax.swing.table.DefaultTableModel;
+import javax.swing.table.AbstractTableModel;
 import java.util.List;
 
-public class SinhVienTableModel extends DefaultTableModel {
+public class SinhVienTableModel extends AbstractTableModel {
     private final String[] columnNames = {"MaSV", "HoTen", "Lop", "DiemTB"};
-    private final List<SinhVienDTO> students;
+    private List<SinhVienDTO> students;
 
     public SinhVienTableModel(List<SinhVienDTO> students) {
         super();
         this.students = students;
-        loadStudentsToModel();
     }
 
-    private void loadStudentsToModel() {
-        setColumnIdentifiers(columnNames);
-        for (SinhVienDTO student : students) {
-            Object[] row = {student.getMaSV(), student.getHoTen(), student.getLop(), student.getDiemTB()};
-            addRow(row);
-        }
+    public void setStudents(List<SinhVienDTO> students) {
+        this.students = students;
+        fireTableDataChanged();
     }
 
     @Override
-    public String getColumnName(int column) {
-        return columnNames[column];
+    public int getRowCount() {
+        return students.size();
     }
 
     @Override
-    public boolean isCellEditable(int row, int column) {
-        return false;
+    public int getColumnCount() {
+        return columnNames.length;
+    }
+
+    @Override
+    public Object getValueAt(int rowIndex, int columnIndex) {
+        SinhVienDTO student = students.get(rowIndex);
+        return switch (columnIndex) {
+            case 0 -> student.getMaSV();
+            case 1 -> student.getHoTen();
+            case 2 -> student.getLop();
+            case 3 -> student.getDiemTB();
+            default -> null;
+        };
     }
 }

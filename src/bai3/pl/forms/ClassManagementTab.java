@@ -15,6 +15,8 @@ public class ClassManagementTab extends JPanel implements IAddUpdateClassRequest
     private final IClassBLL _classBLL = new ClassBLL();
 
     private JTable classTable;
+    private LopTableModel classTableModel;
+
     private JScrollPane classScrollPane;
     private JPanel controlPanel;
     private JTextField maLopTextField;
@@ -52,14 +54,16 @@ public class ClassManagementTab extends JPanel implements IAddUpdateClassRequest
         });
 
         deleteBtn.addActionListener(e -> {
-            int reply = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn muốn xóa lớp đã chọn?", "Xác nhận", JOptionPane.YES_NO_OPTION);
-            if (reply == JOptionPane.YES_OPTION) {
-                int selectedRow = classTable.getSelectedRow();
-                if (selectedRow != -1) {
+            int selectedRow = classTable.getSelectedRow();
+            if (selectedRow != -1) {
+                int reply = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn muốn xóa lớp đã chọn?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+                if (reply == JOptionPane.YES_OPTION) {
                     String maLop = (String) classTable.getValueAt(selectedRow, 0);
 
                     MessageDTO message = _classBLL.deleteClass(maLop);
                     if (message.statusCode() == 200) {
+                        loadClasses();
+                        add(classScrollPane, BorderLayout.CENTER);
                         JOptionPane.showMessageDialog(null, message.message(), "Thành công", JOptionPane.INFORMATION_MESSAGE);
                     } else {
                         JOptionPane.showMessageDialog(null, message.message(), "Lỗi", JOptionPane.ERROR_MESSAGE);
@@ -73,15 +77,26 @@ public class ClassManagementTab extends JPanel implements IAddUpdateClassRequest
             form.setVisible(true);
         });
 
-
+        updateBtn.addActionListener(e -> {
+            AddUpdateClassForm form = new AddUpdateClassForm(this, new LopDTO(
+                    maLopTextField.getText(),
+                    tenLopTextField.getText(),
+                    cvhtTextField.getText()
+            ));
+        });
     }
 
     private void loadClasses() {
         List<LopDTO> classList = _classBLL.getAllClasses();
-        LopTableModel classTableModel = new LopTableModel(classList);
+        classTableModel = new LopTableModel(classList);
         classTable = new JTable(classTableModel);
         classTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         classScrollPane = new JScrollPane(classTable);
+    }
+
+    private void refreshClasses() {
+        List<LopDTO> classList = _classBLL.getAllClasses();
+        classTableModel.setClasses(classList);
     }
 
     private void createControlPanel() {

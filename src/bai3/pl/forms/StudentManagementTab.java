@@ -3,10 +3,13 @@ package bai3.pl.forms;
 import bai3.bll.IStudentBLL;
 import bai3.bll.StudentBLL;
 import bai3.dto.models.SinhVienDTO;
+import bai3.dto.responses.MessageDTO;
 import bai3.pl.interfaces.IAddUpdateStudentRequester;
 import bai3.pl.tablemodels.SinhVienTableModel;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.util.List;
 
@@ -14,6 +17,8 @@ public class StudentManagementTab extends JPanel implements IAddUpdateStudentReq
     private final IStudentBLL _studentBLL = new StudentBLL();
 
     private JTable studentTable;
+    private SinhVienTableModel studentTableModel;
+
     private JScrollPane studentScrollPane;
     private JPanel controlPanel;
     private JTextField maSVTextField;
@@ -36,6 +41,13 @@ public class StudentManagementTab extends JPanel implements IAddUpdateStudentReq
         add(controlPanel, BorderLayout.SOUTH);
 
         // Handle listeners
+        studentTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+
+            }
+        });
+
         studentTable.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
                 int selectedRow = studentTable.getSelectedRow();
@@ -53,6 +65,24 @@ public class StudentManagementTab extends JPanel implements IAddUpdateStudentReq
             }
         });
 
+        deleteBtn.addActionListener(e -> {
+            int selectedRow = studentTable.getSelectedRow();
+            if (selectedRow != -1) {
+                int reply = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn muốn xóa sinh viên đã chọn?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+                if (reply == JOptionPane.YES_OPTION) {
+                    String maSV = (String) studentTable.getValueAt(selectedRow, 0);
+
+                    MessageDTO message = _studentBLL.deleteStudent(maSV);
+                    if (message.statusCode() == 200) {
+                        refreshStudents();
+                        JOptionPane.showMessageDialog(null, message.message(), "Thành công", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(null, message.message(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+        });
+
         addBtn.addActionListener(e -> {
             AddUpdateStudentForm form = new AddUpdateStudentForm(this);
             form.setVisible(true);
@@ -61,10 +91,20 @@ public class StudentManagementTab extends JPanel implements IAddUpdateStudentReq
 
     private void loadStudents() {
         List<SinhVienDTO> studentList = _studentBLL.getAllStudents();
-        SinhVienTableModel classTableModel = new SinhVienTableModel(studentList);
-        studentTable = new JTable(classTableModel);
+        studentTableModel = new SinhVienTableModel(studentList);
+        studentTable = new JTable(studentTableModel);
         studentTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         studentScrollPane = new JScrollPane(studentTable);
+    }
+
+    private void refreshStudents() {
+        List<SinhVienDTO> studentList = _studentBLL.getAllStudents();
+        studentTableModel.setStudents(studentList);
+
+        maSVTextField.setText("");
+        hoTenTextField.setText("");
+        lopTextField.setText("");
+        diemTBTextField.setText("");
     }
 
     private void createControlPanel() {

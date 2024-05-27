@@ -2,34 +2,41 @@ package bai3.pl.tablemodels;
 
 import bai3.dto.models.LopDTO;
 
-import javax.swing.table.DefaultTableModel;
+import javax.swing.table.AbstractTableModel;
 import java.util.List;
 
-public class LopTableModel extends DefaultTableModel {
+public class LopTableModel extends AbstractTableModel {
     private final String[] columnNames = {"MaLop", "TenLop", "CVHT"};
-    private final List<LopDTO> classes;
+    private List<LopDTO> classes;
 
     public LopTableModel(List<LopDTO> classes) {
         super();
         this.classes = classes;
-        loadClassesToModel();
     }
 
-    private void loadClassesToModel() {
-        setColumnIdentifiers(columnNames);
-        for (LopDTO classObj : classes) {
-            Object[] row = {classObj.getMaLop(), classObj.getTenLop(), classObj.getCvht()};
-            addRow(row);
-        }
+    public void setClasses(List<LopDTO> classes) {
+        this.classes = classes;
+        fireTableDataChanged();
     }
 
     @Override
-    public String getColumnName(int column) {
-        return columnNames[column];
+    public int getRowCount() {
+        return classes.size();
     }
 
     @Override
-    public boolean isCellEditable(int row, int column) {
-        return false;
+    public int getColumnCount() {
+        return columnNames.length;
+    }
+
+    @Override
+    public Object getValueAt(int rowIndex, int columnIndex) {
+        LopDTO classObj = classes.get(rowIndex);
+        return switch (columnIndex) {
+            case 0 -> classObj.getMaLop();
+            case 1 -> classObj.getTenLop();
+            case 2 -> classObj.getCvht();
+            default -> null;
+        };
     }
 }

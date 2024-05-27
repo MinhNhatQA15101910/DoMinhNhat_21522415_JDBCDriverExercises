@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 
 public class App extends JFrame {
-    private final JTabbedPane tabbedPane;
 
     public App() {
         setTitle("Quản lý sinh viên và lớp học");
@@ -13,8 +12,7 @@ public class App extends JFrame {
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        tabbedPane = new JTabbedPane();
-
+        JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.addTab("Sinh Viên", new StudentManagementTab());
         tabbedPane.addTab("Lớp", new ClassManagementTab());
 
