@@ -12,6 +12,7 @@ public class LopTableModel extends AbstractTableModel {
     public LopTableModel(List<LopDTO> classes) {
         super();
         this.classes = classes;
+
     }
 
     public void setClasses(List<LopDTO> classes) {
@@ -27,6 +28,11 @@ public class LopTableModel extends AbstractTableModel {
     @Override
     public int getColumnCount() {
         return columnNames.length;
+    }
+
+    @Override
+    public String getColumnName(int column) {
+        return columnNames[column];
     }
 
     @Override

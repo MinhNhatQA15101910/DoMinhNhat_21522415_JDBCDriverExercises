@@ -11,7 +11,7 @@ public class StudentBLL implements IStudentBLL {
     private final IStudentDAL _studentDAL = new StudentDAL();
 
     @Override
-    public MessageDTO addStudent(SinhVienDTO student, String diemTB) {
+    public MessageDTO addStudent(SinhVienDTO student, String avgScore) {
         try {
             if (student.maSV().isEmpty()) {
                 return new MessageDTO(
@@ -27,7 +27,7 @@ public class StudentBLL implements IStudentBLL {
                 );
             }
 
-            float diemTBValue = Float.parseFloat(diemTB);
+            float diemTBValue = Float.parseFloat(avgScore);
 
             if (diemTBValue < 0 || diemTBValue > 10) {
                 return new MessageDTO(
@@ -68,5 +68,47 @@ public class StudentBLL implements IStudentBLL {
     @Override
     public List<SinhVienDTO> getAllStudents() {
         return _studentDAL.getAllStudents();
+    }
+
+    @Override
+    public MessageDTO updateStudent(SinhVienDTO student, String avgScore) {
+        try {
+            if (student.maSV().isEmpty()) {
+                return new MessageDTO(
+                        400,
+                        "MSSV không được để trống."
+                );
+            }
+
+            if (student.hoTen().isEmpty()) {
+                return new MessageDTO(
+                        400,
+                        "Họ tên không được để trống."
+                );
+            }
+
+            float diemTBValue = Float.parseFloat(avgScore);
+
+            if (diemTBValue < 0 || diemTBValue > 10) {
+                return new MessageDTO(
+                        400,
+                        "Điểm TB không hợp lệ"
+                );
+            }
+
+            SinhVienDTO updatedStudent = new SinhVienDTO(
+                    student.maSV(),
+                    student.hoTen(),
+                    student.lop(),
+                    diemTBValue
+            );
+
+            return _studentDAL.updateStudent(updatedStudent);
+        } catch (NumberFormatException e) {
+            return new MessageDTO(
+                    400,
+                    "Điểm TB không hợp lệ"
+            );
+        }
     }
 }

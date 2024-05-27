@@ -136,7 +136,7 @@ public class AddUpdateStudentForm extends JFrame {
     }
 
     private void addStudent() {
-        SinhVienDTO student = new SinhVienDTO(
+        SinhVienDTO newStudent = new SinhVienDTO(
                 maSVTextField.getText().trim(),
                 hoTenTextField.getText().trim(),
                 ((LopDTO) Objects.requireNonNull(lopComboBox.getSelectedItem())).maLop(),
@@ -144,7 +144,7 @@ public class AddUpdateStudentForm extends JFrame {
         );
         String avgScore = diemTBField.getText();
 
-        MessageDTO message = _studentBLL.addStudent(student, avgScore);
+        MessageDTO message = _studentBLL.addStudent(newStudent, avgScore);
         if (message.statusCode() == 200) {
             if (_addUpdateStudentRequester != null) {
                 _addUpdateStudentRequester.onAddUpdateStudentFormClosing();
@@ -156,5 +156,22 @@ public class AddUpdateStudentForm extends JFrame {
     }
 
     private void updateStudent() {
+        SinhVienDTO updatedStudent = new SinhVienDTO(
+                maSVTextField.getText().trim(),
+                hoTenTextField.getText().trim(),
+                ((LopDTO) Objects.requireNonNull(lopComboBox.getSelectedItem())).maLop(),
+                0
+        );
+        String avgScore = diemTBField.getText();
+
+        MessageDTO message = _studentBLL.updateStudent(updatedStudent, avgScore);
+        if (message.statusCode() == 200) {
+            if (_addUpdateStudentRequester != null) {
+                _addUpdateStudentRequester.onAddUpdateStudentFormClosing();
+            }
+            JOptionPane.showMessageDialog(null, message.message(), "Thành công", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, message.message(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }

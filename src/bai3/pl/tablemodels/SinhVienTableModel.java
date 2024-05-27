@@ -30,6 +30,11 @@ public class SinhVienTableModel extends AbstractTableModel {
     }
 
     @Override
+    public String getColumnName(int column) {
+        return columnNames[column];
+    }
+
+    @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         SinhVienDTO student = students.get(rowIndex);
         return switch (columnIndex) {
