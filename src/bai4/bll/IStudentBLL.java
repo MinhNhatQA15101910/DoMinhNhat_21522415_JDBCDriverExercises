@@ -8,6 +8,7 @@ import java.util.List;
 public interface IStudentBLL {
     MessageDTO addStudent(SinhVienDTO student, String avgScore);
     MessageDTO deleteStudent(String maSV);
+    List<SinhVienDTO> getStudentsFilteredById(String maSVFilter);
     List<SinhVienDTO> getAllStudents();
     MessageDTO updateStudent(SinhVienDTO student, String avgScore);
 }

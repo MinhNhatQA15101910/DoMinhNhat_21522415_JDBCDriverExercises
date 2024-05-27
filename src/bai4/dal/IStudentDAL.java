@@ -10,6 +10,7 @@ public interface IStudentDAL {
     MessageDTO deleteStudent(String maSV);
     List<SinhVienDTO> getAllStudents();
     List<SinhVienDTO> getStudentsByClassId(String maLop);
+    List<SinhVienDTO> getStudentsFilteredById(String maSVFilter);
     SinhVienDTO getStudentById(String maSV);
     MessageDTO updateStudent(SinhVienDTO student);
 }

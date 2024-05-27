@@ -66,6 +66,11 @@ public class StudentBLL implements IStudentBLL {
     }
 
     @Override
+    public List<SinhVienDTO> getStudentsFilteredById(String maSVFilter) {
+        return _studentDAL.getStudentsFilteredById(maSVFilter);
+    }
+
+    @Override
     public List<SinhVienDTO> getAllStudents() {
         return _studentDAL.getAllStudents();
     }

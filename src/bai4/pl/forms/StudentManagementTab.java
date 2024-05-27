@@ -129,6 +129,14 @@ public class StudentManagementTab extends JPanel implements IAddUpdateStudentReq
             filterPanel.revalidate();
             filterPanel.repaint();
         });
+
+        filterBtn.addActionListener(e -> {
+            String currFilter = (String) filterAttrComboBox.getSelectedItem();
+            assert currFilter != null;
+            if (currFilter.equals("MaSV")) {
+                filterByMaSV();
+            }
+        });
     }
 
     private void loadStudents() {
@@ -250,6 +258,13 @@ public class StudentManagementTab extends JPanel implements IAddUpdateStudentReq
         panel.requestFocus();
 
         return panel;
+    }
+
+    private void filterByMaSV() {
+        String maSVFilter = maSVFilterTextField.getText().trim();
+
+        List<SinhVienDTO> filteredStudentList = _studentBLL.getStudentsFilteredById(maSVFilter);
+        studentTableModel.setStudents(filteredStudentList);
     }
 
     @Override
