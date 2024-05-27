@@ -4,6 +4,7 @@ import bai4.bll.IStudentBLL;
 import bai4.bll.StudentBLL;
 import bai4.dto.models.SinhVienDTO;
 import bai4.dto.responses.MessageDTO;
+import bai4.dto.responses.SinhVienListMessageDTO;
 import bai4.pl.interfaces.IAddUpdateStudentRequester;
 import bai4.pl.tablemodels.SinhVienTableModel;
 
@@ -135,6 +136,12 @@ public class StudentManagementTab extends JPanel implements IAddUpdateStudentReq
             assert currFilter != null;
             if (currFilter.equals("MaSV")) {
                 filterByMaSV();
+            } else if (currFilter.equals("HoTen")) {
+                filterByHoTen();
+            } else if (currFilter.equals("Lop")) {
+                filterByLop();
+            } else if (currFilter.equals("DiemTB")) {
+                filterByDiemTB();
             }
         });
     }
@@ -265,6 +272,32 @@ public class StudentManagementTab extends JPanel implements IAddUpdateStudentReq
 
         List<SinhVienDTO> filteredStudentList = _studentBLL.getStudentsFilteredById(maSVFilter);
         studentTableModel.setStudents(filteredStudentList);
+    }
+
+    private void filterByHoTen() {
+        String hoTenFilter = hoTenFilterTextField.getText().trim();
+
+        List<SinhVienDTO> filteredStudentList = _studentBLL.getStudentsFilteredByFullName(hoTenFilter);
+        studentTableModel.setStudents(filteredStudentList);
+    }
+
+    private void filterByLop() {
+        String lopFilter = lopFilterTextField.getText().trim();
+
+        List<SinhVienDTO> filteredStudentList = _studentBLL.getStudentsFilteredByClass(lopFilter);
+        studentTableModel.setStudents(filteredStudentList);
+    }
+
+    private void filterByDiemTB() {
+        String diemTBMin = diemTBMinFilterTextField.getText().trim();
+        String diemTBMax = diemTBMaxFilterTextField.getText().trim();
+        SinhVienListMessageDTO message = _studentBLL.getStudentsFilteredByAvgScore(diemTBMin, diemTBMax);
+        if (message.statusCode() != 200) {
+            JOptionPane.showMessageDialog(null, message.message(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+
+        }
+
+        studentTableModel.setStudents(message.studentList());
     }
 
     @Override

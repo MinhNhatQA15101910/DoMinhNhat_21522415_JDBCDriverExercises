@@ -2,6 +2,7 @@ package bai4.dal;
 
 import bai4.dto.models.SinhVienDTO;
 import bai4.dto.responses.MessageDTO;
+import bai4.dto.responses.SinhVienListMessageDTO;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -79,6 +80,88 @@ public class StudentDAL implements IStudentDAL {
         try (Connection conn = DriverManager.getConnection(Utils.CONNECTION_URL)) {
             try (PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM SinhVien WHERE Lop = ?")) {
                 pstmt.setString(1, maLop);
+
+                ResultSet rsData = pstmt.executeQuery();
+
+                while (rsData.next()) {
+                    studentList.add(
+                            new SinhVienDTO(
+                                    rsData.getString("MaSV"),
+                                    rsData.getString("HoTen"),
+                                    rsData.getString("Lop"),
+                                    rsData.getFloat("DiemTB")
+                            )
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return studentList;
+    }
+
+    @Override
+    public SinhVienListMessageDTO getStudentsFilteredByAvgScore(float diemTBMinValue, float diemTBMaxValue) {
+        List<SinhVienDTO> studentList = new ArrayList<>();
+        try (Connection conn = DriverManager.getConnection(Utils.CONNECTION_URL)) {
+            try (PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM SinhVien WHERE DiemTB >= ? AND DiemTB <= ?")) {
+                pstmt.setFloat(1, diemTBMinValue);
+                pstmt.setFloat(2, diemTBMaxValue);
+
+                ResultSet rsData = pstmt.executeQuery();
+
+                while (rsData.next()) {
+                    studentList.add(
+                            new SinhVienDTO(
+                                    rsData.getString("MaSV"),
+                                    rsData.getString("HoTen"),
+                                    rsData.getString("Lop"),
+                                    rsData.getFloat("DiemTB")
+                            )
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            return new SinhVienListMessageDTO(500, e.getMessage(), null);
+        }
+
+        return new SinhVienListMessageDTO(200, "", studentList);
+    }
+
+    @Override
+    public List<SinhVienDTO> getStudentsFilteredByClass(String lopFilter) {
+        List<SinhVienDTO> studentList = new ArrayList<>();
+        try (Connection conn = DriverManager.getConnection(Utils.CONNECTION_URL)) {
+            try (PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM SinhVien WHERE Lop LIKE ?")) {
+                pstmt.setString(1, "%" + lopFilter + "%");
+
+                ResultSet rsData = pstmt.executeQuery();
+
+                while (rsData.next()) {
+                    studentList.add(
+                            new SinhVienDTO(
+                                    rsData.getString("MaSV"),
+                                    rsData.getString("HoTen"),
+                                    rsData.getString("Lop"),
+                                    rsData.getFloat("DiemTB")
+                            )
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return studentList;
+    }
+
+    @Override
+    public List<SinhVienDTO> getStudentsFilteredByFullName(String hoTenFilter) {
+        List<SinhVienDTO> studentList = new ArrayList<>();
+        try (Connection conn = DriverManager.getConnection(Utils.CONNECTION_URL)) {
+            try (PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM SinhVien WHERE HoTen LIKE ?")) {
+                pstmt.setString(1, "%" + hoTenFilter + "%");
 
                 ResultSet rsData = pstmt.executeQuery();
 

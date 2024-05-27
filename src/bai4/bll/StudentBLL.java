@@ -4,6 +4,7 @@ import bai4.dal.IStudentDAL;
 import bai4.dal.StudentDAL;
 import bai4.dto.models.SinhVienDTO;
 import bai4.dto.responses.MessageDTO;
+import bai4.dto.responses.SinhVienListMessageDTO;
 
 import java.util.List;
 
@@ -63,6 +64,40 @@ public class StudentBLL implements IStudentBLL {
     @Override
     public MessageDTO deleteStudent(String maSV) {
         return _studentDAL.deleteStudent(maSV);
+    }
+
+    @Override
+    public SinhVienListMessageDTO getStudentsFilteredByAvgScore(String diemTBMin, String diemTBMax) {
+        try {
+            float diemTBMinValue = Float.parseFloat(diemTBMin);
+            float diemTBMaxValue = Float.parseFloat(diemTBMax);
+
+            if (diemTBMinValue > diemTBMaxValue) {
+                return new SinhVienListMessageDTO(
+                        400,
+                        "Khoảng nhập vào không hợp lệ.",
+                        null
+                );
+            }
+
+            return _studentDAL.getStudentsFilteredByAvgScore(diemTBMinValue, diemTBMaxValue);
+        } catch (NumberFormatException e) {
+            return new SinhVienListMessageDTO(
+                    400,
+                    "Khoảng nhập vào không hợp lệ.",
+                    null
+            );
+        }
+    }
+
+    @Override
+    public List<SinhVienDTO> getStudentsFilteredByClass(String lopFilter) {
+        return _studentDAL.getStudentsFilteredByClass(lopFilter);
+    }
+
+    @Override
+    public List<SinhVienDTO> getStudentsFilteredByFullName(String hoTenFilter) {
+        return _studentDAL.getStudentsFilteredByFullName(hoTenFilter);
     }
 
     @Override
