@@ -33,9 +33,9 @@ public class LopTableModel extends AbstractTableModel {
     public Object getValueAt(int rowIndex, int columnIndex) {
         LopDTO classObj = classes.get(rowIndex);
         return switch (columnIndex) {
-            case 0 -> classObj.getMaLop();
-            case 1 -> classObj.getTenLop();
-            case 2 -> classObj.getCvht();
+            case 0 -> classObj.maLop();
+            case 1 -> classObj.tenLop();
+            case 2 -> classObj.cvht();
             default -> null;
         };
     }

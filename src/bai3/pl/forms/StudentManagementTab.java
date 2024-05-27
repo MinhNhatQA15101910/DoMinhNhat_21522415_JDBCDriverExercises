@@ -149,6 +149,6 @@ public class StudentManagementTab extends JPanel implements IAddUpdateStudentReq
 
     @Override
     public void onAddUpdateStudentFormClosing() {
-        loadStudents();
+        refreshStudents();
     }
 }

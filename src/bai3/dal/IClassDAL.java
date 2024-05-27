@@ -6,7 +6,9 @@ import bai3.dto.responses.MessageDTO;
 import java.util.List;
 
 public interface IClassDAL {
+    MessageDTO addClass(LopDTO classObj);
     MessageDTO deleteClass(String maLop);
-    List<LopDTO> getAllClasses();
     LopDTO getClassById(String maLop);
+    LopDTO getClassByName(String tenLop);
+    List<LopDTO> getAllClasses();
 }

@@ -9,6 +9,27 @@ import java.util.List;
 
 public class ClassDAL implements IClassDAL {
     @Override
+    public MessageDTO addClass(LopDTO classObj) {
+        try (Connection conn = DriverManager.getConnection(Utils.CONNECTION_URL)) {
+            try (PreparedStatement pstmt = conn.prepareStatement("INSERT INTO Lop VALUES (?, ?, ?)")) {
+                pstmt.setString(1, classObj.maLop());
+                pstmt.setString(2, classObj.tenLop());
+                pstmt.setString(3, classObj.cvht());
+
+                int rowsAffected = pstmt.executeUpdate();
+
+                if (rowsAffected > 0) {
+                    return new MessageDTO(200, "Thêm lớp thành công.");
+                }
+
+                return new MessageDTO(500, "Đã có lỗi xảy ra.");
+            }
+        } catch (SQLException e) {
+            return new MessageDTO(500, e.getMessage());
+        }
+    }
+
+    @Override
     public MessageDTO deleteClass(String maLop) {
         try (Connection conn = DriverManager.getConnection(Utils.CONNECTION_URL)) {
             try (PreparedStatement pstmt = conn.prepareStatement("DELETE FROM Lop WHERE MaLop = ?")) {
@@ -25,6 +46,54 @@ public class ClassDAL implements IClassDAL {
         } catch (SQLException e) {
             return new MessageDTO(500, e.getMessage());
         }
+    }
+
+    @Override
+    public LopDTO getClassById(String maLop) {
+        LopDTO classObj = new LopDTO("", "", "");
+        try (Connection conn = DriverManager.getConnection(Utils.CONNECTION_URL)) {
+            try (PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Lop WHERE MaLop = ?")) {
+                pstmt.setString(1, maLop);
+
+                ResultSet rsData = pstmt.executeQuery();
+
+                while (rsData.next()) {
+                    classObj = new LopDTO(
+                            rsData.getString("MaLop"),
+                            rsData.getString("TenLop"),
+                            rsData.getString("CVHT")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return classObj;
+    }
+
+    @Override
+    public LopDTO getClassByName(String tenLop) {
+        LopDTO classObj = new LopDTO("", "", "");
+        try (Connection conn = DriverManager.getConnection(Utils.CONNECTION_URL)) {
+            try (PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Lop WHERE TenLop = ?")) {
+                pstmt.setString(1, tenLop);
+
+                ResultSet rsData = pstmt.executeQuery();
+
+                while (rsData.next()) {
+                    classObj = new LopDTO(
+                            rsData.getString("MaLop"),
+                            rsData.getString("TenLop"),
+                            rsData.getString("CVHT")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return classObj;
     }
 
     @Override
@@ -48,28 +117,5 @@ public class ClassDAL implements IClassDAL {
         }
 
         return classList;
-    }
-
-    @Override
-    public LopDTO getClassById(String maLop) {
-        LopDTO classObj = new LopDTO();
-        try (Connection conn = DriverManager.getConnection(Utils.CONNECTION_URL)) {
-            try (PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Lop WHERE MaLop = ?")) {
-                pstmt.setString(1, maLop);
-                ResultSet rsData = pstmt.executeQuery();
-
-                while (rsData.next()) {
-                    classObj = new LopDTO(
-                            rsData.getString("MaLop"),
-                            rsData.getString("TenLop"),
-                            rsData.getString("CVHT")
-                    );
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return classObj;
     }
 }

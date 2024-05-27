@@ -21,7 +21,7 @@ public class LopCellRenderer extends JLabel implements ListCellRenderer<LopDTO> 
         }
 
         if (classObj != null) {
-            setText(classObj.getTenLop());
+            setText(classObj.tenLop());
         } else {
             setText("");
         }

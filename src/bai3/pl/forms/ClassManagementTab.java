@@ -138,6 +138,6 @@ public class ClassManagementTab extends JPanel implements IAddUpdateClassRequest
 
     @Override
     public void onAddUpdateClassFormClosing() {
-        loadClasses();
+        refreshClasses();
     }
 }

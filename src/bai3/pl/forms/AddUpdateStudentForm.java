@@ -4,12 +4,14 @@ import bai3.bll.ClassBLL;
 import bai3.bll.IClassBLL;
 import bai3.dto.models.LopDTO;
 import bai3.dto.models.SinhVienDTO;
+import bai3.dto.responses.MessageDTO;
 import bai3.pl.cellrenderers.LopCellRenderer;
 import bai3.pl.interfaces.IAddUpdateStudentRequester;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
+import java.util.Objects;
 
 public class AddUpdateStudentForm extends JFrame {
     private final IClassBLL _classBLL = new ClassBLL();
@@ -76,16 +78,16 @@ public class AddUpdateStudentForm extends JFrame {
         // Initialize components
         maSVTextField = new JTextField();
         maSVTextField.setEditable(false);
-        maSVTextField.setText(student.getMaSV());
+        maSVTextField.setText(student.maSV());
         hoTenTextField = new JTextField();
-        hoTenTextField.setText(student.getHoTen());
+        hoTenTextField.setText(student.hoTen());
         lopComboBox = new JComboBox<>();
         loadClasses();
         lopComboBox.setSelectedIndex(getSelectedLopIndex());
         lopComboBox.setRenderer(new LopCellRenderer());
         lopComboBox.setSelectedIndex(getSelectedLopIndex());
         diemTBField = new JTextField();
-        diemTBField.setText(Float.toString(student.getDiemTB()));
+        diemTBField.setText(Float.toString(student.diemTB()));
         featureBtn = new JButton("Cập nhật");
 
         // Setup layout
@@ -115,7 +117,7 @@ public class AddUpdateStudentForm extends JFrame {
     private int getSelectedLopIndex() {
         List<LopDTO> classList = _classBLL.getAllClasses();
         for (int i = 0; i < classList.size(); i++) {
-            if (classList.get(i).getMaLop().equals(_student.getLop())) {
+            if (classList.get(i).maLop().equals(_student.lop())) {
                 return i;
             }
         }
@@ -131,6 +133,7 @@ public class AddUpdateStudentForm extends JFrame {
     }
 
     private void addStudent() {
+
     }
 
     private void updateStudent() {

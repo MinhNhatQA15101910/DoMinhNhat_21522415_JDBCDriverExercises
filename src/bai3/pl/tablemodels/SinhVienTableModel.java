@@ -33,10 +33,10 @@ public class SinhVienTableModel extends AbstractTableModel {
     public Object getValueAt(int rowIndex, int columnIndex) {
         SinhVienDTO student = students.get(rowIndex);
         return switch (columnIndex) {
-            case 0 -> student.getMaSV();
-            case 1 -> student.getHoTen();
-            case 2 -> student.getLop();
-            case 3 -> student.getDiemTB();
+            case 0 -> student.maSV();
+            case 1 -> student.hoTen();
+            case 2 -> student.lop();
+            case 3 -> student.diemTB();
             default -> null;
         };
     }

@@ -15,6 +15,48 @@ public class ClassBLL implements IClassBLL {
     private final IStudentDAL _studentDAL = new StudentDAL();
 
     @Override
+    public MessageDTO addClass(LopDTO classObj) {
+        if (classObj.maLop().isEmpty()) {
+            return new MessageDTO(
+                    400,
+                    "Mã lớp không được để trống."
+            );
+        }
+
+        if (classObj.tenLop().isEmpty()) {
+            return new MessageDTO(
+                    400,
+                    "Tên lớp không được để trống."
+            );
+        }
+
+        if (classObj.cvht().isEmpty()) {
+            return new MessageDTO(
+                    400,
+                    "Cố vấn học tập không được để trống."
+            );
+        }
+
+        LopDTO existingClass = _classDAL.getClassById(classObj.maLop());
+        if (!existingClass.maLop().isEmpty()) {
+            return new MessageDTO(
+                    400,
+                    "Đã tồn tại lớp với mã lớp được nhập."
+            );
+        }
+
+        existingClass = _classDAL.getClassByName(classObj.tenLop());
+        if (!existingClass.maLop().isEmpty()) {
+            return new MessageDTO(
+                    400,
+                    "Đã tồn tại lớp với tên lớp được nhập."
+            );
+        }
+
+        return _classDAL.addClass(classObj);
+    }
+
+    @Override
     public List<LopDTO> getAllClasses() {
         return _classDAL.getAllClasses();
     }
@@ -27,10 +69,5 @@ public class ClassBLL implements IClassBLL {
         }
 
         return _classDAL.deleteClass(maLop);
-    }
-
-    @Override
-    public LopDTO getClassById(String maLop) {
-        return _classDAL.getClassById(maLop);
     }
 }

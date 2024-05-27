@@ -1,18 +1,22 @@
 package bai3.pl.forms;
 
+import bai3.bll.ClassBLL;
+import bai3.bll.IClassBLL;
 import bai3.dto.models.LopDTO;
+import bai3.dto.responses.MessageDTO;
 import bai3.pl.interfaces.IAddUpdateClassRequester;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class AddUpdateClassForm extends JFrame {
-    private IAddUpdateClassRequester _addUpdateClassRequester;
-    private LopDTO _class = null;
+    private final IClassBLL _classBLL = new ClassBLL();
 
-    private JTextField maLopTextField;
-    private JTextField tenLopTextField;
-    private JTextField cvhtTextField;
+    private final IAddUpdateClassRequester _addUpdateClassRequester;
+
+    private final JTextField maLopTextField;
+    private final JTextField tenLopTextField;
+    private final JTextField cvhtTextField;
     private JButton featureBtn;
 
     public AddUpdateClassForm(IAddUpdateClassRequester requester) {
@@ -55,7 +59,6 @@ public class AddUpdateClassForm extends JFrame {
 
     public AddUpdateClassForm(IAddUpdateClassRequester requester, LopDTO classObj) {
         _addUpdateClassRequester = requester;
-        _class = classObj;
 
         setTitle("Cập nhật lớp");
         setSize(400, 300);
@@ -65,11 +68,11 @@ public class AddUpdateClassForm extends JFrame {
         // Initialize components
         maLopTextField = new JTextField();
         maLopTextField.setEditable(false);
-        maLopTextField.setText(classObj.getMaLop());
+        maLopTextField.setText(classObj.maLop());
         tenLopTextField = new JTextField();
-        tenLopTextField.setText(classObj.getTenLop());
+        tenLopTextField.setText(classObj.tenLop());
         cvhtTextField = new JTextField();
-        cvhtTextField.setText(classObj.getCvht());
+        cvhtTextField.setText(classObj.cvht());
         featureBtn = new JButton("Cập nhật");
 
         // Setup layout
@@ -99,22 +102,20 @@ public class AddUpdateClassForm extends JFrame {
     }
 
     private void addClass() {
-//        String studentId = studentIdField.getText();
-//        String name = nameField.getText();
-//        String className = classField.getText();
-//        String averageScore = averageScoreField.getText();
-//
-//        JOptionPane.showMessageDialog(this, "Student added:\n" +
-//                "ID: " + studentId + "\nName: " + name + "\nClass: " + className + "\nAverage Score: " + averageScore);
-    }
+        LopDTO newClass = new LopDTO(
+                maLopTextField.getText(),
+                tenLopTextField.getText(),
+                cvhtTextField.getText()
+        );
 
-    private void updateStudent() {
-//        String studentId = studentIdField.getText();
-//        String name = nameField.getText();
-//        String className = classField.getText();
-//        String averageScore = averageScoreField.getText();
-//
-//        JOptionPane.showMessageDialog(this, "Student updated:\n" +
-//                "ID: " + studentId + "\nName: " + name + "\nClass: " + className + "\nAverage Score: " + averageScore);
+        MessageDTO message = _classBLL.addClass(newClass);
+        if (message.statusCode() == 200) {
+            if (_addUpdateClassRequester != null) {
+                _addUpdateClassRequester.onAddUpdateClassFormClosing();
+            }
+            JOptionPane.showMessageDialog(null, message.message(), "Thành công", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, message.message(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }

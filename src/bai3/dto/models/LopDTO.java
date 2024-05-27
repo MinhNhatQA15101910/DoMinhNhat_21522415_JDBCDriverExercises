@@ -1,40 +1,15 @@
 package bai3.dto.models;
 
-public class LopDTO {
-    private String maLop;
-    private String tenLop;
-    private String cvht;
+import java.util.Objects;
 
-    public LopDTO() {
-    }
-
-    public LopDTO(String maLop, String tenLop, String cvht) {
-        this.maLop = maLop;
-        this.tenLop = tenLop;
-        this.cvht = cvht;
-    }
-
-    public String getMaLop() {
-        return maLop;
-    }
-
-    public void setMaLop(String maLop) {
-        this.maLop = maLop;
-    }
-
-    public String getTenLop() {
-        return tenLop;
-    }
-
-    public void setTenLop(String tenLop) {
-        this.tenLop = tenLop;
-    }
-
-    public String getCvht() {
-        return cvht;
-    }
-
-    public void setCvht(String cvht) {
-        this.cvht = cvht;
+public record LopDTO(String maLop, String tenLop, String cvht) {
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LopDTO lopDTO = (LopDTO) o;
+        return Objects.equals(cvht, lopDTO.cvht) &&
+                Objects.equals(maLop, lopDTO.maLop) &&
+                Objects.equals(tenLop, lopDTO.tenLop);
     }
 }

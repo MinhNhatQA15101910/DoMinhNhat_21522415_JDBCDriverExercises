@@ -82,10 +82,10 @@ public class StudentDAL implements IStudentDAL {
     public MessageDTO updateStudent(SinhVienDTO student) {
         try (Connection conn = DriverManager.getConnection(Utils.CONNECTION_URL)) {
             try (PreparedStatement pstmt = conn.prepareStatement("UPDATE SinhVien SET HoTen = ?, Lop = ?, DiemTB = ? WHERE MaSV = ?")) {
-                pstmt.setString(1, student.getHoTen());
-                pstmt.setString(2, student.getLop());
-                pstmt.setFloat(3, student.getDiemTB());
-                pstmt.setString(4, student.getMaSV());
+                pstmt.setString(1, student.hoTen());
+                pstmt.setString(2, student.lop());
+                pstmt.setFloat(3, student.diemTB());
+                pstmt.setString(4, student.maSV());
 
                 int rowsAffected = pstmt.executeUpdate();
 
