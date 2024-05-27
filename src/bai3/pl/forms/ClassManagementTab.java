@@ -62,8 +62,7 @@ public class ClassManagementTab extends JPanel implements IAddUpdateClassRequest
 
                     MessageDTO message = _classBLL.deleteClass(maLop);
                     if (message.statusCode() == 200) {
-                        loadClasses();
-                        add(classScrollPane, BorderLayout.CENTER);
+                        refreshClasses();
                         JOptionPane.showMessageDialog(null, message.message(), "Thành công", JOptionPane.INFORMATION_MESSAGE);
                     } else {
                         JOptionPane.showMessageDialog(null, message.message(), "Lỗi", JOptionPane.ERROR_MESSAGE);
@@ -78,11 +77,17 @@ public class ClassManagementTab extends JPanel implements IAddUpdateClassRequest
         });
 
         updateBtn.addActionListener(e -> {
-            AddUpdateClassForm form = new AddUpdateClassForm(this, new LopDTO(
-                    maLopTextField.getText(),
-                    tenLopTextField.getText(),
-                    cvhtTextField.getText()
-            ));
+            int selectedRow = classTable.getSelectedRow();
+            if (selectedRow != -1) {
+                LopDTO updatedClass = new LopDTO(
+                        (String) classTable.getValueAt(selectedRow, 0),
+                        (String) classTable.getValueAt(selectedRow, 1),
+                        (String) classTable.getValueAt(selectedRow, 2)
+                );
+
+                AddUpdateClassForm form = new AddUpdateClassForm(this, updatedClass);
+                form.setVisible(true);
+            }
         });
     }
 

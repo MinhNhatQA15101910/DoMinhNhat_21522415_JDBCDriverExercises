@@ -28,4 +28,9 @@ public class ClassBLL implements IClassBLL {
 
         return _classDAL.deleteClass(maLop);
     }
+
+    @Override
+    public LopDTO getClassById(String maLop) {
+        return _classDAL.getClassById(maLop);
+    }
 }

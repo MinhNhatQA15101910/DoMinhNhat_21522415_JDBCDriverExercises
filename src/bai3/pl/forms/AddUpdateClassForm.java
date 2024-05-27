@@ -36,7 +36,7 @@ public class AddUpdateClassForm extends JFrame {
         infoPanel.setLayout(new GridLayout(3, 2, 10, 10));
         infoPanel.add(new JLabel("Mã lớp:"));
         infoPanel.add(maLopTextField);
-        infoPanel.add(new JLabel("Tên lớp"));
+        infoPanel.add(new JLabel("Tên lớp:"));
         infoPanel.add(tenLopTextField);
         infoPanel.add(new JLabel("CVHT:"));
         infoPanel.add(cvhtTextField);
@@ -64,6 +64,7 @@ public class AddUpdateClassForm extends JFrame {
 
         // Initialize components
         maLopTextField = new JTextField();
+        maLopTextField.setEditable(false);
         maLopTextField.setText(classObj.getMaLop());
         tenLopTextField = new JTextField();
         tenLopTextField.setText(classObj.getTenLop());
@@ -78,7 +79,7 @@ public class AddUpdateClassForm extends JFrame {
         infoPanel.setLayout(new GridLayout(3, 2, 10, 10));
         infoPanel.add(new JLabel("Mã lớp:"));
         infoPanel.add(maLopTextField);
-        infoPanel.add(new JLabel("Tên lớp"));
+        infoPanel.add(new JLabel("Tên lớp:"));
         infoPanel.add(tenLopTextField);
         infoPanel.add(new JLabel("CVHT:"));
         infoPanel.add(cvhtTextField);

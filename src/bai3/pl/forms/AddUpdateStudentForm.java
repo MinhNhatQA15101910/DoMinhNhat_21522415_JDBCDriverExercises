@@ -1,20 +1,25 @@
 package bai3.pl.forms;
 
+import bai3.bll.ClassBLL;
+import bai3.bll.IClassBLL;
+import bai3.dto.models.LopDTO;
 import bai3.dto.models.SinhVienDTO;
+import bai3.pl.cellrenderers.LopCellRenderer;
 import bai3.pl.interfaces.IAddUpdateStudentRequester;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.List;
 
 public class AddUpdateStudentForm extends JFrame {
-    private IAddUpdateStudentRequester _addUpdateStudentRequester;
+    private final IClassBLL _classBLL = new ClassBLL();
+
+    private final IAddUpdateStudentRequester _addUpdateStudentRequester;
     private SinhVienDTO _student = null;
 
     private JTextField maSVTextField;
     private JTextField hoTenTextField;
-    private JTextField lopTextField;
+    private JComboBox<LopDTO> lopComboBox;
     private JTextField diemTBField;
     private JButton featureBtn;
 
@@ -29,7 +34,9 @@ public class AddUpdateStudentForm extends JFrame {
         // Initialize components
         maSVTextField = new JTextField();
         hoTenTextField = new JTextField();
-        lopTextField = new JTextField();
+        lopComboBox = new JComboBox<>();
+        loadClasses();
+        lopComboBox.setRenderer(new LopCellRenderer());
         diemTBField = new JTextField();
         featureBtn = new JButton("Thêm");
 
@@ -40,10 +47,10 @@ public class AddUpdateStudentForm extends JFrame {
         infoPanel.setLayout(new GridLayout(4, 2, 10, 10));
         infoPanel.add(new JLabel("MSSV:"));
         infoPanel.add(maSVTextField);
-        infoPanel.add(new JLabel("Họ tên"));
+        infoPanel.add(new JLabel("Họ tên:"));
         infoPanel.add(hoTenTextField);
         infoPanel.add(new JLabel("Lớp:"));
-        infoPanel.add(lopTextField);
+        infoPanel.add(lopComboBox);
         infoPanel.add(new JLabel("Điểm TB:"));
         infoPanel.add(diemTBField);
         add(infoPanel, BorderLayout.CENTER);
@@ -54,12 +61,7 @@ public class AddUpdateStudentForm extends JFrame {
         add(featurePanel, BorderLayout.SOUTH);
 
         // Add action listeners
-        featureBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                addStudent();
-            }
-        });
+        featureBtn.addActionListener(e -> addStudent());
     }
 
     public AddUpdateStudentForm(IAddUpdateStudentRequester requester, SinhVienDTO student) {
@@ -73,14 +75,18 @@ public class AddUpdateStudentForm extends JFrame {
 
         // Initialize components
         maSVTextField = new JTextField();
+        maSVTextField.setEditable(false);
         maSVTextField.setText(student.getMaSV());
         hoTenTextField = new JTextField();
         hoTenTextField.setText(student.getHoTen());
-        lopTextField = new JTextField();
-        lopTextField.setText(student.getLop());
+        lopComboBox = new JComboBox<>();
+        loadClasses();
+        lopComboBox.setSelectedIndex(getSelectedLopIndex());
+        lopComboBox.setRenderer(new LopCellRenderer());
+        lopComboBox.setSelectedIndex(getSelectedLopIndex());
         diemTBField = new JTextField();
         diemTBField.setText(Float.toString(student.getDiemTB()));
-        featureBtn = new JButton("Thêm");
+        featureBtn = new JButton("Cập nhật");
 
         // Setup layout
         setLayout(new BorderLayout(10, 10));
@@ -89,10 +95,10 @@ public class AddUpdateStudentForm extends JFrame {
         infoPanel.setLayout(new GridLayout(4, 2, 10, 10));
         infoPanel.add(new JLabel("MSSV:"));
         infoPanel.add(maSVTextField);
-        infoPanel.add(new JLabel("Họ tên"));
+        infoPanel.add(new JLabel("Họ tên:"));
         infoPanel.add(hoTenTextField);
         infoPanel.add(new JLabel("Lớp:"));
-        infoPanel.add(lopTextField);
+        infoPanel.add(lopComboBox);
         infoPanel.add(new JLabel("Điểm TB:"));
         infoPanel.add(diemTBField);
         add(infoPanel, BorderLayout.CENTER);
@@ -103,31 +109,30 @@ public class AddUpdateStudentForm extends JFrame {
         add(featurePanel, BorderLayout.SOUTH);
 
         // Add action listeners
-        featureBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                addStudent();
+        featureBtn.addActionListener(e -> updateStudent());
+    }
+
+    private int getSelectedLopIndex() {
+        List<LopDTO> classList = _classBLL.getAllClasses();
+        for (int i = 0; i < classList.size(); i++) {
+            if (classList.get(i).getMaLop().equals(_student.getLop())) {
+                return i;
             }
-        });
+        }
+
+        return -1;
+    }
+
+    private void loadClasses() {
+        List<LopDTO> classList = _classBLL.getAllClasses();
+        for (LopDTO classObj : classList) {
+            lopComboBox.addItem(classObj);
+        }
     }
 
     private void addStudent() {
-//        String studentId = studentIdField.getText();
-//        String name = nameField.getText();
-//        String className = classField.getText();
-//        String averageScore = averageScoreField.getText();
-//
-//        JOptionPane.showMessageDialog(this, "Student added:\n" +
-//                "ID: " + studentId + "\nName: " + name + "\nClass: " + className + "\nAverage Score: " + averageScore);
     }
 
     private void updateStudent() {
-//        String studentId = studentIdField.getText();
-//        String name = nameField.getText();
-//        String className = classField.getText();
-//        String averageScore = averageScoreField.getText();
-//
-//        JOptionPane.showMessageDialog(this, "Student updated:\n" +
-//                "ID: " + studentId + "\nName: " + name + "\nClass: " + className + "\nAverage Score: " + averageScore);
     }
 }

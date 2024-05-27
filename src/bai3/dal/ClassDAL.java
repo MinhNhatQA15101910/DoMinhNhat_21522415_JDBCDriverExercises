@@ -49,4 +49,27 @@ public class ClassDAL implements IClassDAL {
 
         return classList;
     }
+
+    @Override
+    public LopDTO getClassById(String maLop) {
+        LopDTO classObj = new LopDTO();
+        try (Connection conn = DriverManager.getConnection(Utils.CONNECTION_URL)) {
+            try (PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Lop WHERE MaLop = ?")) {
+                pstmt.setString(1, maLop);
+                ResultSet rsData = pstmt.executeQuery();
+
+                while (rsData.next()) {
+                    classObj = new LopDTO(
+                            rsData.getString("MaLop"),
+                            rsData.getString("TenLop"),
+                            rsData.getString("CVHT")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return classObj;
+    }
 }

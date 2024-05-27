@@ -8,8 +8,6 @@ import bai3.pl.interfaces.IAddUpdateStudentRequester;
 import bai3.pl.tablemodels.SinhVienTableModel;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.util.List;
 
@@ -41,13 +39,6 @@ public class StudentManagementTab extends JPanel implements IAddUpdateStudentReq
         add(controlPanel, BorderLayout.SOUTH);
 
         // Handle listeners
-        studentTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-
-            }
-        });
-
         studentTable.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
                 int selectedRow = studentTable.getSelectedRow();
@@ -86,6 +77,21 @@ public class StudentManagementTab extends JPanel implements IAddUpdateStudentReq
         addBtn.addActionListener(e -> {
             AddUpdateStudentForm form = new AddUpdateStudentForm(this);
             form.setVisible(true);
+        });
+
+        updateBtn.addActionListener(e -> {
+            int selectedRow = studentTable.getSelectedRow();
+            if (selectedRow != -1) {
+                SinhVienDTO updatedStudent = new SinhVienDTO(
+                        (String) studentTable.getValueAt(selectedRow, 0),
+                        (String) studentTable.getValueAt(selectedRow, 1),
+                        (String) studentTable.getValueAt(selectedRow, 2),
+                        (Float) studentTable.getValueAt(selectedRow, 3)
+                );
+
+                AddUpdateStudentForm form = new AddUpdateStudentForm(this, updatedStudent);
+                form.setVisible(true);
+            }
         });
     }
 

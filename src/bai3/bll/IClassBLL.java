@@ -8,4 +8,5 @@ import java.util.List;
 public interface IClassBLL {
     List<LopDTO> getAllClasses();
     MessageDTO deleteClass(String maLop);
+    LopDTO getClassById(String maLop);
 }
